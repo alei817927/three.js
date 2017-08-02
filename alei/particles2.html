@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>three.js canvas - particles - random</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <style>
+    body {
+      background-color: #000000;
+      margin: 0px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+<script src="../build/three.js"></script>
+<script src="../examples/js/renderers/Projector.js"></script>
+<script src="../examples/js/renderers/CanvasRenderer.js"></script>
+<script src="../examples/js/libs/tween.min.js"></script>
+
+<script>
+  var container;
+  var camera, scene, renderer, particle;
+  var mouseX = 0, mouseY = 0;
+  var windowHalfX = window.innerWidth / 2;
+  var windowHalfY = window.innerHeight / 2;
+  var length = 10, width = 10, height = 10;
+  var interval = 5;
+  var theta = 0;
+  init();
+  animate();
+  function init() {
+//    initData();
+    initCamera();
+    initScene();
+    initParticles();
+    initCube();
+//    initMeshBackground();
+    initRenderer();
+//    var gridHelper = new THREE.GridHelper(100, 100);
+//    scene.add(gridHelper);
+    window.addEventListener('resize', onWindowResize, false);
+  }
+  function initData() {
+    var loader = new THREE.FileLoader();
+    loader.load(
+      'data/dailyd01.json',
+      function (data) {
+        var _data = JSON.parse(data);
+      },
+      function (xhr) {
+        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+      },
+      function (xhr) {
+        console.error('An error happened');
+      }
+    );
+  }
+  function initCube() {
+    var geometryCube = cube();
+//    geometryCube.computeLineDistances();
+    var object = new THREE.LineSegments(geometryCube, new THREE.LineDashedMaterial({
+      color: 0xffaa00,
+      dashSize: 3,
+      gapSize: 1,
+      linewidth: 2
+    }));
+    scene.add(object);
+  }
+  function initCamera() {
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+//    camera.position.z = 100;
+//    camera.position.set(30, 30, 50);
+//    camera.position.set(50, 50, 100);
+    camera.position.y = 105;
+  }
+  function initRenderer() {
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    renderer = new THREE.CanvasRenderer();
+//    renderer.setClearColor(0x000040);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+  }
+  function initScene() {
+    scene = new THREE.Scene();
+  }
+  function initParticles() {
+    for (var x = 0; x < length; x++) {
+      for (var y = 0; y < width; y++) {
+        for (var z = 0; z < height; z++) {
+          var material = new THREE.SpriteMaterial({
+            map: new THREE.CanvasTexture(generateSprite(x, y, z)),
+            blending: THREE.AdditiveBlending
+          });
+          var particle = initParticle(material, x, y, z);
+          scene.add(particle);
+        }
+      }
+    }
+  }
+  function onWindowResize() {
+    windowHalfX = window.innerWidth / 2;
+    windowHalfY = window.innerHeight / 2;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+  function generateSprite(x, y, z) {
+    var canvas = document.createElement('canvas');
+    canvas.width = 16;
+    canvas.height = 16;
+    var context = canvas.getContext('2d');
+    var gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
+    gradient.addColorStop(0, 'rgba(255,255,255,1)');
+//    gradient.addColorStop(0.2, 'rgba(0,255,255,1)');
+    var color = 'rgba(' + (255 - x * 10) + ',' + (255 - y * 10) + ',' + (255 - z * 10) + ',1)';
+    gradient.addColorStop(0.2, color);
+    color = 'rgba(' + (x + 50) + ',' + (y + 50) + ',' + (z + 50) + ',1)';
+    gradient.addColorStop(0.4, color);
+//    gradient.addColorStop(0.4, 'rgba(0,0,64,1)');
+    gradient.addColorStop(1, 'rgba(0,0,0,1)');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    return canvas;
+  }
+  function initParticle(material, x, y, z) {
+    var particle = new THREE.Sprite(material);
+    var amount = x * y + z;
+    particle.position.set((x - (length - 1) / 2) * interval, (y) * interval, (z - (height - 1) / 2) * interval);
+//    particle.scale.x = particle.scale.y = Math.random() + 1;
+    particle.scale.x = particle.scale.y = Math.random() * amount * 0.1;
+    return particle;
+  }
+  function animate() {
+    requestAnimationFrame(animate);
+    render();
+    theta += 0.5;
+    camera.position.x = 130 * Math.sin(THREE.Math.degToRad(theta));
+//    camera.position.y = 50 * Math.sin( THREE.Math.degToRad( theta ) );
+    camera.position.z = 130 * Math.cos(THREE.Math.degToRad(theta));
+    camera.lookAt(scene.position);
+    camera.updateMatrixWorld();
+//    camera.rotation.y=theta;
+//    camera.position.x=50 * Math.sin( THREE.Math.degToRad( theta ) );
+//    camera.position.y=50*Math.cos(theta);
+//    camera.position.set(50 * Math.sin(theta), 0, 5 * Math.cos(theta));
+  }
+  function render() {
+//    camera.position.x += ( mouseX - camera.position.x ) * 0.05;
+//    camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
+//    camera.lookAt( scene.position );
+    renderer.render(scene, camera);
+  }
+
+  function initMeshBackground() {
+    var geometry = new THREE.PlaneGeometry(113, 50);
+    var material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture('texture/bg.png')});
+    material.side = THREE.DoubleSide;
+    material.alphaTest = 0.5;
+    var plane = new THREE.Mesh(geometry, material);
+    plane.rotation.x = -Math.PI / 2;
+    plane.position.y = -1;
+    scene.add(plane);
+  }
+  function cube() {
+    var factor = interval * 0.5;
+    var x = length * factor, y = width * interval, z = height * factor;
+    console.log(x, y, z);
+    var geometry = new THREE.Geometry();
+    geometry.vertices.push(
+      new THREE.Vector3(-x, 0, -z),
+      new THREE.Vector3(-x, y, -z),
+      new THREE.Vector3(-x, y, -z),
+      new THREE.Vector3(x, y, -z),
+      new THREE.Vector3(x, y, -z),
+      new THREE.Vector3(x, 0, -z),
+      new THREE.Vector3(x, 0, -z),
+      new THREE.Vector3(-x, 0, -z),
+      new THREE.Vector3(-x, 0, z),
+      new THREE.Vector3(-x, y, z),
+      new THREE.Vector3(-x, y, z),
+      new THREE.Vector3(x, y, z),
+      new THREE.Vector3(x, y, z),
+      new THREE.Vector3(x, 0, z),
+      new THREE.Vector3(x, 0, z),
+      new THREE.Vector3(-x, 0, z),
+      new THREE.Vector3(-x, 0, -z),
+      new THREE.Vector3(-x, 0, z),
+      new THREE.Vector3(-x, y, -z),
+      new THREE.Vector3(-x, y, z),
+      new THREE.Vector3(x, y, -z),
+      new THREE.Vector3(x, y, z),
+      new THREE.Vector3(x, 0, -z),
+      new THREE.Vector3(x, 0, z)
+    );
+    return geometry;
+  }
+</script>
+
+</body>
+</html>

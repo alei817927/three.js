@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>three.js webgl - parallax mapping</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+      padding: 0;
+      margin: 0;
+      font-weight: bold;
+      overflow: hidden;
+    }
+
+    a {
+      color: #ffffff;
+    }
+
+    #info {
+      position: absolute;
+      top: 0px;
+      width: 100%;
+      color: #ffffff;
+      padding: 5px;
+      font-family: Monospace;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    #oldie {
+      background: rgb(200, 100, 0) !important;
+      color: #fff;
+    }
+
+    #vt {
+      display: none
+    }
+
+    #vt, #vt a {
+      color: orange;
+    }
+  </style>
+</head>
+
+<body>
+
+
+<script src="../build/three.js"></script>
+<script src="js/Detector.js"></script>
+<script src="js/libs/dat.gui.min.js"></script>
+<script src="js/libs/stats.min.js"></script>
+
+<script src="js/controls/TrackballControls.js"></script>
+
+<script src="js/shaders/ParallaxShader.js"></script>
+
+<script>
+  if (!Detector.webgl) Detector.addGetWebGLMessage();
+  var camera;
+  var scene;
+  var renderer;
+  var mesh;
+  var controls;
+  var mouse = new THREE.Vector2();
+  var offset = new THREE.Vector3(10, 10, 10);
+
+  init();
+  animate();
+
+  function init() {
+
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
+
+    initControls();
+
+    var light = new THREE.DirectionalLight(0xffffff);
+    light.position.set(1, 1, 1).normalize();
+    scene.add(light);
+    light = new THREE.DirectionalLight(0xffffff);
+    light.position.set(-1, -1, -1).normalize();
+    scene.add(light);
+
+
+    var geometry = new THREE.CubeGeometry(20, 20, 20);
+
+    var pics = ['testdata/crate.jpg', 'testdata/bricks.jpg', 'testdata/clouds.jpg', 'testdata/stone-wall.jpg', 'testdata/water.jpg', 'testdata/wood-floor.jpg'];
+    var materials = [];
+    for (var i = 0; i < pics.length; i++) {
+      materials.push(new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture(pics[i])}));
+    }
+    var meshFaceMaterial = new THREE.MeshFaceMaterial(materials);
+    mesh = new THREE.Mesh(geometry, meshFaceMaterial);
+    mesh.position.z = -50;
+    scene.add(mesh);
+
+    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    window.addEventListener('resize', onWindowResize, false);
+    renderer.domElement.addEventListener('mousemove', function onMouseMove(e) {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      pick();
+    });
+//				render();
+  }
+  function initControls() {
+    controls = new THREE.TrackballControls(camera);
+    controls.rotateSpeed = 1.0;
+    controls.zoomSpeed = 1.2;
+    controls.panSpeed = 0.8;
+    controls.noZoom = false;
+    controls.noPan = false;
+    controls.staticMoving = true;
+    controls.dynamicDampingFactor = 0.3;
+  }
+  function pick(){
+
+//    camera.position.x+=0.1;
+//    camera.position.y+=0.1;
+//    camera.position.z+=0.1;
+				mesh.rotation.x += .04;
+				mesh.rotation.y += .02;
+    camera.updateMatrix();
+  }
+  function animate() {
+//				mesh.rotation.x += .04;
+//				mesh.rotation.y += .02;
+
+    requestAnimationFrame(animate);
+    controls.update();
+    render();
+  }
+
+  function render() {
+    renderer.render(scene, camera);
+  }
+
+  function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    render();
+  }
+</script>
+
+</body>
+</html>

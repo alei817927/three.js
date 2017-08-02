@@ -151,6 +151,7 @@ var files = {
 		"webgl_materials_nodes",
 		"webgl_materials_normalmap",
 		"webgl_materials_parallaxmap",
+		"webgl_materials_parallaxmap-test",
 		"webgl_materials_reflectivity",
 		"webgl_materials_shaders_fresnel",
 		"webgl_materials_skin",

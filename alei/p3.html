@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>demo - p3</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <style>
+    body {
+      background-color: #000000;
+      margin: 0px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+<script src="../build/three.js"></script>
+<script src="../examples/js/renderers/Projector.js"></script>
+<script src="../examples/js/renderers/CanvasRenderer.js"></script>
+<script src="../examples/js/libs/tween.min.js"></script>
+
+<script>
+  eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1;};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p;}('a W;a h,r,B,q;a 36=0,1X=0;a 1O=d.G/2;a 1H=d.D/2;a o=30,k=10,m=20;a 11=2,Q=2,O=2;a K,X,I,u;a M;a C=0;1z(c(){1N();U();g.l(7);19();g.l(8)});c 1N(){K=o*(11+1);I=m*(O+1);u=K>I?K:I;X=k*(Q+1);g.l(\'h 22\',K,X,I,u)}c U(){1D();g.l(1);1y();g.l(2);1x();g.l(3);1K();g.l(4);1q();g.l(5);d.1Y(\'24\',1T,1Z)}c 1z(U){a 1u=9 6.1V();1u.2r(\'1h/2v.2w\',c(1h){a J=2c.2e(1h);o=J.2f;k=J.2b;m=J.28;M=J.29;g.l(o,k,m,M.o);U()},c(R){g.l((R.1F/R.2a*E)+\'% 1F\')},c(R){g.1J(\'2j 1J 2g\')})}c 1K(){a 1I=1d();a 1G=9 6.2n(1I,9 6.2i({2h:2m,2l:2,1W:1,2k:2}));r.1a(1G)}c 1D(){h=9 6.2u(1Q,d.G/d.D,1,2x);a x=u*p.1s(6.p.P(C));a z=u*p.1w(6.p.P(C));h.A.1k(x,X,z)}c 1q(){W=14.1M(\'2A\');14.2z.1v(W);B=9 6.2y();B.2p(d.2o);B.1E(d.G,d.D);W.1v(B.2q)}c 1y(){r=9 6.2t();h.1t(r.A)}c 1x(){T(a y=0;y<k;y++){T(a z=0;z<m;z++){T(a x=0;x<o;x++){a v=x*y+z;a s=9 6.2s({1m:9 6.23(1L(v)),21:6.26});a q=1n(s,x,y,z,v);r.1a(q)}}}}c 1T(){1O=d.G/2;1H=d.D/2;h.1U=d.G/d.D;h.27();B.1E(d.G,d.D)}c 1L(v){a f=14.1M(\'f\');f.k=16;f.m=16;a Y=f.38(\'2d\');a H=Y.37(f.k/ 2, f.m /2,0,f.k/ 2, f.m /2,f.k/2);H.17(0,\'13(1b,1b,1b,1)\');a e=1P(M[v]);H.17(0.4,\'13(\'+e[0]+\',\'+e[1]+\',\'+e[2]+\',1)\');H.17(1,\'13(0,0,0,1)\');Y.3c=H;Y.3b(0,0,f.k,f.m);w f}c 1n(s,x,y,z,v){a q=9 6.3a(s);q.A.1k((x-(o-1)/ 2) * 11, (y) * Q, (z - (m - 1) /2)*O);a t=M[v]*0.32;t=t>1?1:t;q.1C.x=q.1C.y=t;w q}c 18(){C+=0.5;h.A.x=u*p.1s(6.p.P(C));h.A.z=u*p.1w(6.p.P(C));h.1t(r.A);h.31()}c 19(){2Z(19);1c();18();}c 1c(){B.1c(r,h)}c 34(){a L=9 6.33(3d,S);a s=9 6.3k({1m:6.3j.3m(\'3g/3i.3h\')});s.3e=6.3f;s.3l=0.5;a N=9 6.2J(L,s);N.18.x=-p.2I/2;N.A.y=-1;r.1a(N)}c 1d(){a x=o*11*0.5,y=k*Q,z=m*O*0.5;g.l(\'x,y,z 2H  1d\',x,y,z);a L=9 6.2M();L.2L.2K(9 6.b(-x,0,-z),9 6.b(-x,y,-z),9 6.b(-x,y,-z),9 6.b(x,y,-z),9 6.b(x,y,-z),9 6.b(x,0,-z),9 6.b(x,0,-z),9 6.b(-x,0,-z),9 6.b(-x,0,z),9 6.b(-x,y,z),9 6.b(-x,y,z),9 6.b(x,y,z),9 6.b(x,y,z),9 6.b(x,0,z),9 6.b(x,0,z),9 6.b(-x,0,z),9 6.b(-x,0,-z),9 6.b(-x,0,z),9 6.b(-x,y,-z),9 6.b(-x,y,z),9 6.b(x,y,-z),9 6.b(x,y,z),9 6.b(x,0,-z),9 6.b(x,0,z));w L}a e=[[20,35,39,0.1],[20,S,1p,0.2],[20,2C,2B,0.5],[20,V,F,1],[20,1i,2G,2],[20,1S,1j,3],[20,E,2F,5],[20,2V,1f,8],[20,1g,2T,12],[20,2Y,1r,15],[20,1R,2W,20],[20,1l,Z,25],[20,1B,1R,35],[20,1A,1g,S],[20,Z,E,2S],[1i,1j,V,1Q],[1o,F,V,1S],[Z,F,V,E],[n,n,j,2R],[n,1p,j,2Q],[n,F,j,1o],[n,1r,j,1l],[n,1A,j,Z],[n,1B,j,F],[n,1g,j,2N],[n,E,j,2O],[n,1i,j,2P],[F,S,j,2X],[1j,30,j,2U],[1f,10,j,2E],[1f,10,E,2D]];c 1P(t){T(a i=0;i<e.o;i++){1e(e[i][3]>t){1e(i==0)w e[i];1e(e[i-1]==t)w e[i-1];w e[i]}}w e[e.o-1]}',62,209,'||||||THREE|||new|var|Vector3|function|window|colors|canvas|console|camera||40|width|log|height|240|length|Math|particle|scene|material|val|cameraW|amount|return||||position|renderer|theta|innerHeight|100|220|innerWidth|gradient|cameraZ|_0|cameraX|geometry|values|plane|zInterval|degToRad|yInterval|xhr|50|for|init|70|container|cameraY|context|180||xInterval||rgba|document|||addColorStop|rotation|animate|add|255|render|cube|if|200|120|data|80|210|set|150|map|initParticle|135|230|initRenderer|190|sin|lookAt|loader|appendChild|cos|initParticles|initScene|initData|170|160|scale|initCamera|setSize|loaded|object|windowHalfY|geometryCube|error|initCube|generateSprite|createElement|resetCamera|windowHalfX|getColor|75|140|90|onWindowResize|aspect|FileLoader|gapSize|mouseY|addEventListener|false||blending|size|CanvasTexture|resize||AdditiveBlending|updateProjectionMatrix|rows|vals|total|lays|JSON||parse|cols|happened|color|LineDashedMaterial|An|linewidth|dashSize|0xffaa00|LineSegments|devicePixelRatio|setPixelRatio|domElement|load|SpriteMaterial|Scene|PerspectiveCamera|dailyd01|json|1000|CanvasRenderer|body|div|225|60|500|450|205|215|in|PI|Mesh|push|vertices|Geometry|250|280|310|125|115|65|195|400|110|185|350|130|requestAnimationFrame||updateMatrixWorld|02|PlaneGeometry|initMeshBackground||mouseX|createRadialGradient|getContext|235|Sprite|fillRect|fillStyle|113|side|DoubleSide|texture|png|bg|ImageUtils|MeshPhongMaterial|alphaTest|loadTexture'.split('|'),0,{}))
+</script>
+</body>
+</html>

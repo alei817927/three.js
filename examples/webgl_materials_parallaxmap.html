@@ -69,7 +69,7 @@
 			};
 
 			init();
-			initGUI();
+//			initGUI();
 			animate();
 
 			function init() {
@@ -91,40 +91,40 @@
 				renderer.gammaInput = true;
 				renderer.gammaOutput = true;
 
-				var controls = new THREE.OrbitControls( camera, renderer.domElement );
+//				var controls = new THREE.OrbitControls( camera, renderer.domElement );
 
-				stats = new Stats();
-				container.appendChild( stats.dom );
+//				stats = new Stats();
+//				container.appendChild( stats.dom );
 
-				window.addEventListener( 'resize', onWindowResize, false );
-
-			}
-
-			function guiChanged() {
-
-				var uniforms = material.uniforms;
-
-				uniforms[ 'parallaxScale' ].value = -1.0 * effectController.scale;
-				uniforms[ 'parallaxMinLayers' ].value = effectController.minLayers;
-				uniforms[ 'parallaxMaxLayers' ].value = effectController.maxLayers;
-
-				material.defines = {};
-				material.defines[THREE.ParallaxShader.modes[effectController.mode]] = '';
-				material.needsUpdate = true;
+//				window.addEventListener( 'resize', onWindowResize, false );
 
 			}
 
-			function initGUI() {
+//			function guiChanged() {
+//
+//				var uniforms = material.uniforms;
+//
+//				uniforms[ 'parallaxScale' ].value = -1.0 * effectController.scale;
+//				uniforms[ 'parallaxMinLayers' ].value = effectController.minLayers;
+//				uniforms[ 'parallaxMaxLayers' ].value = effectController.maxLayers;
+//
+//				material.defines = {};
+//				material.defines[THREE.ParallaxShader.modes[effectController.mode]] = '';
+//				material.needsUpdate = true;
+//
+//			}
 
-				var gui = new dat.GUI();
-
-				gui.add( effectController, 'mode', Object.keys( THREE.ParallaxShader.modes ) ).onChange( guiChanged );
-				gui.add( effectController, 'scale', 0.0, 0.01, 0.001 ).onChange( guiChanged );
-				gui.add( effectController, 'minLayers', 1.0, 30, 1 ).onChange( guiChanged );
-				gui.add( effectController, 'maxLayers', 1.0, 30, 1 ).onChange( guiChanged );
-
-				guiChanged();
-			}
+//			function initGUI() {
+//
+//				var gui = new dat.GUI();
+//
+//				gui.add( effectController, 'mode', Object.keys( THREE.ParallaxShader.modes ) ).onChange( guiChanged );
+//				gui.add( effectController, 'scale', 0.0, 0.01, 0.001 ).onChange( guiChanged );
+//				gui.add( effectController, 'minLayers', 1.0, 30, 1 ).onChange( guiChanged );
+//				gui.add( effectController, 'maxLayers', 1.0, 30, 1 ).onChange( guiChanged );
+//
+//				guiChanged();
+//			}
 
 			function onWindowResize() {
 

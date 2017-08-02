@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="utf-8">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
+  <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+  <style>
+    body {
+      margin: 0px;
+      overflow: hidden;
+    }
+    #myCanvas{
+      background:#ffffff;
+      position: absolute;
+      left: calc(50% - 140px);
+      top: calc(50% - 140px);
+    }
+  </style>
+</head>
+<body>
+<div style="width:100%;text-align: center;margin-top: 20px" id="desc">资源加载处理……</div>
+<canvas id="myCanvas" width="300" height="300">
+  Your browser does not support the HTML5 canvas tag.
+</canvas>
+<script type="text/javascript">
+  //A    R    G    B
+  var colors = [
+    [205, 20, 20, 240],
+    [205, 20, 50, 230],
+    [205, 20, 80, 220],
+    [205, 20, 100, 210],
+    [205, 20, 120, 200],
+    [205, 20, 140, 190],
+    [205, 20, 160, 180],
+    [205, 20, 160, 140],
+    [205, 80, 200, 70],
+    [205, 150, 240, 70],
+    [205, 240, 240, 40],
+    [205, 240, 210, 40],
+    [205, 240, 160, 40],
+    [205, 240, 130, 40],
+    [205, 240, 40, 40],
+    [205, 240, 10, 40]
+  ];
+  var min = 0, max = colors.length - 1;
+  var cols = 126, rows = 126, cellSize = 2;
+  var width = cols * cellSize, height = rows * cellSize;
+  function buildData(cols, row, max) {
+    var _data = [];
+    var total = cols * row;
+    for (var c = 0; c < total; c++) {
+      _data[c] = Math.floor(Math.random() * max);
+    }
+    return _data;
+  }
+  function buildImageData(data, colors) {
+    var _data = [];
+    for (var i = 0; i < data.length; i++) {
+      var color = colors[data[i]];
+      if (!color) {
+        console.log(data[i], i);
+      }
+      _data.push(color[1]);
+      _data.push(color[2]);
+      _data.push(color[3]);
+      _data.push(color[0]);
+    }
+    return _data;
+  }
+
+  function hexToR(h) {
+    return parseInt((cutHex(h)).substring(0, 2), 16)
+  }
+
+  function hexToG(h) {
+    return parseInt((cutHex(h)).substring(2, 4), 16)
+  }
+
+  function hexToB(h) {
+    return parseInt((cutHex(h)).substring(4, 6), 16)
+  }
+  function cutHex(h) {
+    return (h.charAt(0) == "#") ? h.substring(1, 7) : h
+  }
+  var canvas = document.createElement('canvas');
+  var octx = canvas.getContext('2d');
+  octx.webkitImageSmoothingEnabled = false;
+  octx.imageSmoothingEnabled = false;
+  var image = octx.getImageData(0, 0, cols, rows);
+
+  var myCanvas = document.getElementById('myCanvas');
+  var myOctx = myCanvas.getContext('2d');
+
+  console.log(width, height, cols, rows)
+
+  function refresh(data, i) {
+//    var data = buildData(cols, rows, max);
+//    var imageData = buildImageData(data[i], colors);
+    var imageData = data[i];
+    image.data.set(new Uint8Array(imageData));
+    octx.putImageData(image, 0, 0);
+    myOctx.drawImage(canvas, 0, 0, cols, rows, 0, 0, width, height);
+    i++;
+    //if (i >= data.length)return;
+    setTimeout(function () {
+      refresh(data, i < data.length ? i : 0);
+    }, 100);
+  }
+
+  var interpolateNum = 5;
+  var linear = d3.scale.linear()
+    .domain([0, interpolateNum])
+    .range([0, 1]);
+  function processData(data) {
+    var maxIndex = data.length - 1;
+    var newData = [];
+    for (var i = 0; i <= maxIndex; i++) {
+      var interpolateArr = [];
+      var left = data[i];
+      var right = data[i + 1];
+      var colorLeft;
+      if (!right) {
+        for (var m = 0; m < left.length; m++) {
+          colorLeft = colors[left[m]];
+          for (var j = 0; j < interpolateNum; j++) {
+            if (!interpolateArr[j])interpolateArr[j] = [];
+            interpolateArr[j].push(colorLeft[1]);
+            interpolateArr[j].push(colorLeft[2]);
+            interpolateArr[j].push(colorLeft[3]);
+            interpolateArr[j].push(colorLeft[0]);
+          }
+        }
+      } else {
+        for (var m = 0; m < left.length; m++) {
+          colorLeft = colors[left[m]];
+          var colorRight = colors[right[m]];
+          var a = d3.rgb(colorLeft[1], colorLeft[2], colorLeft[3]);
+          var b = d3.rgb(colorRight[1], colorRight[2], colorRight[3]);
+          var compute = d3.interpolate(a, b);
+          for (var j = 0; j < interpolateNum; j++) {
+            if (!interpolateArr[j])interpolateArr[j] = [];
+//          interpolateArr[j].push(_d[j]);
+            var hexColor = compute(linear(j));
+            interpolateArr[j].push(hexToR(hexColor));
+            interpolateArr[j].push(hexToG(hexColor));
+            interpolateArr[j].push(hexToB(hexColor));
+            interpolateArr[j].push(colorLeft[0]);
+          }
+        }
+      }
+      for (var j = 0; j < interpolateNum; j++) {
+        newData.push(interpolateArr[j]);
+      }
+      console.log(i, "====y====", new Date());
+    }
+    return newData;
+  }
+  console.log("---0----", new Date());
+  $.get('data/binaryHour.json', function (data) {
+    data=eval(data);
+    console.log("---1----", new Date());
+    data = processData(data);
+    console.log("---2----", new Date(), data.length);
+    var desc = document.getElementById('desc');
+    desc.innerHTML = '处理完成！';
+    refresh(data, 0);
+    console.log("---3----", new Date());
+  });
+</script>
+</body>
+</html>
